@@ -1,10 +1,10 @@
 #include <stdlib.h>     /* exit, atoi, malloc, free */
 #include <stdio.h>
 #include <unistd.h>     /* read, write, close */
-#include <string.h>     /* memcpy, memset */
-#include <sys/socket.h> /* socket, connect */
-#include <netinet/in.h> /* struct sockaddr_in, struct sockaddr */
-#include <netdb.h>      /* struct hostent, gethostbyname */
+#include <string.h> 
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
 #include <arpa/inet.h>
 #include "helpers.h"
 #include "buffer.h"
@@ -26,7 +26,7 @@ void compute_message(char *message, const char *line)
     strcat(message, "\r\n");
 }
 
-int open_connection(char *host_ip, int portno, int ip_type, int socket_type, int flag)
+int open_connection(const char *host_ip, int portno, int ip_type, int socket_type, int flag)
 {
     struct sockaddr_in serv_addr;
     int sockfd = socket(ip_type, socket_type, flag);

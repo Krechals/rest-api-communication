@@ -1,10 +1,10 @@
-#include <stdlib.h>     /* exit, atoi, malloc, free */
+#include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h>     /* read, write, close */
-#include <string.h>     /* memcpy, memset */
-#include <sys/socket.h> /* socket, connect */
-#include <netinet/in.h> /* struct sockaddr_in, struct sockaddr */
-#include <netdb.h>      /* struct hostent, gethostbyname */
+#include <unistd.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
 #include <arpa/inet.h>
 #include "nlohmann/json.hpp"
 #include "helpers.h"
@@ -48,6 +48,7 @@ char *compute_get_request(const char *host, const char *url, const char *query_p
     }
     // Step 4: add final new line
     compute_message(message, "");
+    free(line);
     return message;
 }
 
@@ -56,8 +57,7 @@ char *compute_post_request(const char *host, const char *url, const char* conten
 {
     char *message = (char*) calloc(BUFLEN, sizeof(char));
     char *line = (char*) calloc(LINELEN, sizeof(char));
-    char *body_data_buffer = (char *) calloc(LINELEN, sizeof(char));
-
+    
     // Step 1: write the method name, URL and protocol type
     sprintf(line, "POST %s HTTP/1.1", url);
     compute_message(message, line);
@@ -95,9 +95,9 @@ char *compute_post_request(const char *host, const char *url, const char* conten
     // Step 5: add new line at end of header
     compute_message(message, "");
     // Step 6: add the actual payload data
-    memcpy(body_data_buffer, data, strlen(data));
     memset(line, 0, LINELEN);
-    compute_message(message, body_data_buffer);
+    memcpy(line, data, strlen(data));
+    compute_message(message, line);
 
     free(line);
     return message;
@@ -138,5 +138,6 @@ char *compute_delete_request(const char *host, const char *url, const char *quer
     }
     // Step 4: add final new line
     compute_message(message, "");
+    free(line);
     return message;
 }
